@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         }
 
         const outputDir = path.join(os.homedir(), "Downloads");
-        const ytDlpPath = path.join(__dirname, "../../../../../bin", "yt-dlp");
+        const ytDlpPath = path.join(process.cwd(), "bin", "yt-dlp");
         console.log(ytDlpPath);
         const ytDlp = youtubeDl.create(ytDlpPath!);
 
