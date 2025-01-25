@@ -13,14 +13,7 @@ export function PlaceholdersAndVanishInput({
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
-    const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
-
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
-    // const startAnimation = () => {
-    //   intervalRef.current = setInterval(() => {
-    //     setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    //   }, 3000);
-    // };
     const handleVisibilityChange = () => {
         if (document.visibilityState !== "visible" && intervalRef.current) {
             clearInterval(intervalRef.current); // Clear the interval when the tab is not visible
@@ -31,7 +24,6 @@ export function PlaceholdersAndVanishInput({
     };
 
     useEffect(() => {
-        // startAnimation();
         document.addEventListener("visibilitychange", handleVisibilityChange);
 
         return () => {
@@ -75,9 +67,9 @@ export function PlaceholdersAndVanishInput({
         const newData: any[] = [];
 
         for (let t = 0; t < 800; t++) {
-            let i = 4 * t * 800;
+            const i = 4 * t * 800;
             for (let n = 0; n < 800; n++) {
-                let e = i + 4 * n;
+                const e = i + 4 * n;
                 if (
                     pixelData[e] !== 0 &&
                     pixelData[e + 1] !== 0 &&
@@ -256,7 +248,7 @@ export function PlaceholdersAndVanishInput({
                                 y: 5,
                                 opacity: 0,
                             }}
-                            key={`current-placeholder-${currentPlaceholder}`}
+                            key={`current-placeholder`}
                             animate={{
                                 y: 0,
                                 opacity: 1,
