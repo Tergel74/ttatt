@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import youtubeDl from "youtube-dl-exec";
 import path from "path";
 import os from "os";
+import fs from "fs";
 
 export async function POST(request: Request) {
     try {
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
 
         const outputDir = path.join(os.homedir(), "Downloads");
         const ytDlpPath = path.join(process.cwd(), "public", "bin", "yt-dlp");
-        console.log("sdsd", ytDlpPath);
+        fs.chmodSync(ytDlpPath, "755");
         const ytDlp = youtubeDl.create(ytDlpPath!);
 
         const options = {
@@ -29,6 +30,7 @@ export async function POST(request: Request) {
             exec: ytDlpPath,
             audioFormat: "mp3",
             audioQuality: 192,
+            compatOptions: ["no-python"],
         };
 
         const info = await ytDlp(url, {
