@@ -14,10 +14,27 @@ export async function POST(request: Request) {
             );
         }
 
+        // Source path where yt-dlp is stored in your project
+        const ytDlpSourcePath = path.join(
+            process.cwd(),
+            "public",
+            "bin",
+            "yt-dlp"
+        );
+
+        // Destination path where yt-dlp will be copied (writable directory)
+        const ytDlpTempPath = path.join("/tmp", "yt-dlp");
+
+        // Copy the binary to the temporary writable directory
+        fs.copyFileSync(ytDlpSourcePath, ytDlpTempPath);
+
+        // Make sure the binary is executable
+        fs.chmodSync(ytDlpTempPath, 0o755);
+
         const outputDir = path.join(os.homedir(), "Downloads");
-        const ytDlpPath = path.join(process.cwd(), "public", "bin", "yt-dlp");
-        fs.chmodSync(ytDlpPath, "755");
-        const ytDlp = youtubeDl.create(ytDlpPath!);
+        // const ytDlpPath = path.join(process.cwd(), "tmp", "bin", "yt-dlp");
+        // fs.chmodSync(ytDlpPath, "755");
+        const ytDlp = youtubeDl.create(ytDlpTempPath!);
 
         const options = {
             extractAudio: true,
@@ -27,7 +44,7 @@ export async function POST(request: Request) {
             noWarnings: true,
             preferFreeFormats: true,
             addHeader: ["referer:youtube.com", "user-agent:Mozilla/5.0"],
-            exec: ytDlpPath,
+            exec: ytDlpTempPath,
             audioFormat: "mp3",
             audioQuality: 192,
             compatOptions: ["no-python"],
